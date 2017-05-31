@@ -1,0 +1,8 @@
+<div>
+    {% if c %}
+        <div>
+            {{c.comment}}
+            {{c.created_on.strftime("%b %d, %Y")}}
+        </div>
+    {% endif %}
+</div>

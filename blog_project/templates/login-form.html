@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <script type="text/javascript">
+    document.getElementById('log').style.display = 'none';
+  </script>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="well">
+          <h2>Login</h2>
+          <form method="post">
+            <div class="field form-group">
+              <label for="username">Username</label><br>
+              <input autofocus="autofocus" class="form-control" name="username" type="text" value="{{username}}">
+            </div>
+            <div class="field form-group">
+              <label for="password">Password</label><br>
+              <input autofocus="autofocus" class="form-control" name="password" type="password" value="">
+            </div>
+            <div class="error">
+              {{error}}
+            </div>
+            <input type="submit">
+          </form>
+          <div class="signup-redirect">
+            <br>
+            <h5 class="text-center">Not a member</h5>
+            <a class="btn btn-primary btn-lg btn-block" href="/signup">Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

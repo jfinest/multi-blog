@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{post.render(user) | safe}}
+  <br><br>
+  {% if comment %}
+      {% for c in comment %}
+        {{ c.renderd(user) | safe }}
+        <br><br>
+      {% endfor %}
+  {% endif %}
+{% endblock %}

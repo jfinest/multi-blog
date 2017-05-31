@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{post.render(user) | safe}}
+  <form method="post"><input type="hidden" name="id_of_post" value="{{post_id}}">
+      <div class="form-group">
+              <label for="comment">Comment</label>
+              <textarea class="form-control" name="comment" rows="3">{{comment}}</textarea>
+            </div>
+
+      <div class="error">{{error}}</div>
+
+      <input type="submit">
+    </form>
+    <a href="/blog" class="button">Cancel</a>
+{% endblock %}

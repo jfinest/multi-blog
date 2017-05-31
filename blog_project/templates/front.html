@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="contain">
+    {% if user %}
+      <a class="Newpost_button" href="/blog/newpost">Add New Post</a>
+    {% endif %}
+</div>
+
+  {% for p in posts %}
+    {{ p.render(user) | safe }}
+    <br><br>
+  {% endfor %}
+
+{% endblock %}
+
