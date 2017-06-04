@@ -3,6 +3,10 @@
         <div>
             {{c.comment}}
             {{c.created_on.strftime("%b %d, %Y")}}
+            {% if c.created_id == user.key().id() %}
+	          <a class="edit_button" href="/blog/comments/{{c.key().id()}}/edit">Edit</a>
+	          <a class="delete_button" href="/blog/comments/{{c.key().id()}}/delete">Delete</a>
+	        {% endif %}
         </div>
     {% endif %}
 </div>
