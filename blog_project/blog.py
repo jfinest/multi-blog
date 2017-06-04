@@ -278,7 +278,43 @@ class EditPage(BlogHandler):
         else:
             self.redirect('/login')
 
+class CommentEditPage(BlogHandler):
+    def get(self, comment_id):
+        if self.user:
+            key = db.Key.from_path('Comment', int(comment_id), parent=blog_key())
+            comm = db.get(key)
+
+            if not comm:
+                self.error(404)
+                return
+            elif comm.created_id == self.user.key().id():
+                self.render("commentedit.html", comment_id=comment_id, comment=comm.comment)
+
+        else:
+            self.redirect("/login")
+
+    def post(self, id_of_comment):
+        if self.user:
+            comment = self.request.get('comment')
+            id_of_comment = self.request.get('id_of_comment')
+            key = db.Key.from_path('Comment', int(id_of_comment), parent=blog_key())
+            comm = db.get(key)
+
+            if comm and (comm.created_id == self.user.key().id()):
+                if comment:
+                    comm.comment = comment
+                    comm.put()
+                    self.redirect('/blog/comments/%s' % str(comm.id_post))
+                else:
+                    error = "Comment is needed! "
+                    self.render("commentedit.html", comment_id=id_of_comment, comment=comment, error=error)
+            else:
+                self.redirect('/blog')
+        else:
+            self.redirect('/login')    
+
 # Used for when user wants to delete a particular blog.
+
 
 class DeletePost(BlogHandler):
     def get(self, post_id):
@@ -298,11 +334,37 @@ class DeletePost(BlogHandler):
         if self.user:
             key = db.Key.from_path('Post', int(post_id), parent=blog_key())
             post = db.get(key)
-
-            post.delete()
-            self.redirect('/blog')
+            if post.author_id == self.user.key().id():
+                post.delete()
+                self.redirect('/blog')
         else:
             self.redirect('/login')
+
+class CommentDeletePage(BlogHandler):
+    def get(self, comment_id):
+        if self.user:
+            key = db.Key.from_path('Comment', int(comment_id), parent=blog_key())
+            comm = db.get(key)
+
+            if not comm:
+                self.error(404)
+                return
+            elif comm.created_id == self.user.key().id():
+                self.render("commentdelete.html", comment_id=comment_id, comment=comm.comment, comm=comm)    
+        else:
+            self.redirect('/login')    
+
+    def post(self, comment_id):
+        if self.user:
+            key = db.Key.from_path('Comment', int(comment_id), parent=blog_key())
+            comm = db.get(key)
+
+            if comm.created_id == self.user.key().id():    
+                comm.delete()
+                self.redirect('/blog')
+        else:
+            self.redirect('/login')
+
 
 # When user enters a valid blog(contains subject & content) then its created in the datastore with a value of the user so it can be validated when it comes time to edit/delete posts
 
@@ -503,6 +565,8 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/welcome', Welcome),
                                ('/blog/comments/([0-9]+)', CommentPage),
                                ('/blog/add/comments/([0-9]+)', CommentOnPost),
+                               ('/blog/comments/([0-9]+)/edit', CommentEditPage),
+                               ('/blog/comments/([0-9]+)/delete', CommentDeletePage),
                                ('/blog/like/([0-9]+)', LikePost)
                                ],
                               debug=True)
