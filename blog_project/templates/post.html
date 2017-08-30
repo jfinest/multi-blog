@@ -18,8 +18,8 @@
           <a class="delete_button" href="/blog/delete/{{p.key().id()}}">Delete</a>
         {% endif %}
         {% if p.author_id != user.key().id() %}
-          <button class="like_button" id="liked-button_{{p.key().id()}}" data-id="{{p.key().id()}}">Like</button><p style="display:inline" id="like-counter"></p>
-          <button class="dislike_button">Dislike</button><p style="display:inline" id="dislike-counter">Count</p>
+          <button class="like_button" id="liked-button_{{p.key().id()}}" data-id="{{p.key().id()}}">Like</button><p style="display:inline" id="like-counter_{{p.key().id()}}">{{p.like_count}}</p>
+          <button class="dislike_button" id="disliked-button_{{p.key().id()}}" data-id="{{p.key().id()}}">Dislike</button><p style="display:inline" id="dislike-counter_{{p.key().id()}}">{{p.dislike_count}}</p>
         {% endif %}
         {{p.created.strftime("%b %d, %Y")}}
       </div>
