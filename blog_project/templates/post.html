@@ -1,45 +1,46 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link type="text/css" rel="stylesheet" href="/static/main.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="/static/js/event.js"></script>
-</head>
-<body>
-  <div class="post">
-    <div class="post-heading">
-      <div class="post-title">
-        {{p.subject}}
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/main.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="/static/js/event.js"></script>
+  </head>
+  <body> 
+    <div class="post">
+      <div class="post-heading">
+        <div class="post-title">
+          {{p.subject}}
+        </div>
+        <div class="post-date">
+          {% if p.author_id == user.key().id() %}
+            <a class="edit_button" style="display:inline" id="hide_ediButton" href="/blog/editpage/{{p.key().id()}}">Edit</a>
+            <a class="delete_button" style="display:inline" id="hide_deleteButton" href="/blog/delete/{{p.key().id()}}">Delete</a>
+          {% endif %}
+          {% if p.author_id != user.key().id() %}
+            <button class="like_button" id="liked-button_{{p.key().id()}}" data-id="{{p.key().id()}}">Like</button><p style="display:inline" id="like-counter_{{p.key().id()}}">{{p.like_count}}</p>
+            <button class="dislike_button" id="disliked-button_{{p.key().id()}}" data-id="{{p.key().id()}}">Dislike</button><p style="display:inline" id="dislike-counter_{{p.key().id()}}">{{p.dislike_count}}</p>
+          {% endif %}
+          {{p.created.strftime("%b %d, %Y")}}
+        </div>
       </div>
-      <div class="post-date">
-        {% if p.author_id == user.key().id() %}
-          <a class="edit_button" href="/blog/editpage/{{p.key().id()}}">Edit</a>
-          <a class="delete_button" href="/blog/delete/{{p.key().id()}}">Delete</a>
-        {% endif %}
+
+      <div class="post-content">
+        {{p._render_text | safe}}
+      </div>
+      <div>
+      </div>
+      <div id="comment_link">
         {% if p.author_id != user.key().id() %}
-          <button class="like_button" id="liked-button_{{p.key().id()}}" data-id="{{p.key().id()}}">Like</button><p style="display:inline" id="like-counter_{{p.key().id()}}">{{p.like_count}}</p>
-          <button class="dislike_button" id="disliked-button_{{p.key().id()}}" data-id="{{p.key().id()}}">Dislike</button><p style="display:inline" id="dislike-counter_{{p.key().id()}}">{{p.dislike_count}}</p>
+            <a class="comment_button" id="hide_comment" href="/blog/add/comments/{{p.key().id()}}">Comment</a>
+            <a class="comment_button" id="hide_viewComment" href="blog/comments/{{p.key().id()}}">View Comments</a>
+            <br><br>
         {% endif %}
-        {{p.created.strftime("%b %d, %Y")}}
+        <div id="displaying_comments">
+          <br>
+          <h3 style="display:none" id="comment_title">Comments<h3>
+        </div>    
       </div>
     </div>
-
-    <div class="post-content">
-      {{p._render_text | safe}}
-    </div>
-    <div>
-    </div>
-    <div id="comment_link">
-      {% if p.author_id != user.key().id() %}
-          <a class="comment_button" href="/blog/add/comments/{{p.key().id()}}">Comment</a>
-          <a class="comment_button" href="blog/comments/{{p.key().id()}}">View Comments</a>
-
-      {% endif %}
-    </div>
-  </div>
-</body>
+  </body>
 </html>
-
-
-<!-- if p.author_id == user.key().id()  {{p.key().id()}} /?blog_id ='' -->

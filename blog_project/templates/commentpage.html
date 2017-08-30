@@ -2,6 +2,11 @@
 
 {% block content %}
   {{post.render(user) | safe}}
+  <script type="text/javascript">
+      document.getElementById('hide_comment').style.display = 'none';
+      document.getElementById('hide_viewComment').style.display = 'none';
+  </script>
+  
   <form method="post"><input type="hidden" name="id_of_post" value="{{post_id}}">
       <div class="form-group">
               <label for="comment">Comment</label>
