@@ -1,7 +1,7 @@
 # README
 
 ## Overview:
-	
+
 Ever wanted a place where you can just write down anything that is on your mind? Ever wanted to read what is on other people's mind? Now you can. Here people are able to register or login. Don't want to register, you still will be able to read any post others have written. But only members of the blog can create, edit, delete their own posts/comments.
 
 ## CONTEXT:
@@ -9,12 +9,11 @@ Ever wanted a place where you can just write down anything that is on your mind?
 2. index.yaml
 3. app.js
 4. app.yaml
-5. README
-6. static(folder)
+5. static(folder)
     1. js(folder)
         1. event.js
     2. main.css
-7. templates(folder)
+6. templates(folder)
     1. DeletePost.html
     2. post.html
     3. commentview.html
@@ -43,14 +42,14 @@ Ever wanted a place where you can just write down anything that is on your mind?
 
 ##Instructions
 
-There are to ways to open project. 
-	1. Simply visit the current live version of the app at 
+There are to ways to open project.
+	1. Simply visit the current live version of the app at
         * https://blog-160619.appspot.com/
 
 	2. To run a version of the blog from your local server then you need following:
 
 A. Need to make sure you have registered for google account if not please register for one.
-B. Need to be able to create an App Engine Project from 
+B. Need to be able to create an App Engine Project from
     * https://console.cloud.google.com/
 C. Download project from
     1. Terminal type gitclone https://github.com/jfinest/multi-blog.git
@@ -59,8 +58,8 @@ D. From Terminal/Command line change into the Directory where the project’s fi
 E. Run command gcloud dev_appserver.py .
 F. Now go to localhost://8080 to view app
 
-For a detailed instructions please follow https://drive.google.com/file/d/0Byu3UemwRffDc21qd3duLW9LMm8/view 
+For a detailed instructions please follow https://drive.google.com/file/d/0Byu3UemwRffDc21qd3duLW9LMm8/view
 
 ## Source that helped with code for this project
-1. Part of the CSS style were taken from https://radiant-hamlet-1763.herokuapp.com/, and some button style were taken from bootstrap. 
+1. Part of the CSS style were taken from https://radiant-hamlet-1763.herokuapp.com/, and some button style were taken from bootstrap.
 2. Some Handlers, template codes from udacity lessons
