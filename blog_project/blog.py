@@ -132,6 +132,8 @@ class Post(db.Model):
     created = db.DateTimeProperty(auto_now_add = True)
     last_modified = db.DateTimeProperty(auto_now = True)
     author_id = db.IntegerProperty()
+    like_count = db.IntegerProperty(default = 0)
+    dislike_count = db.IntegerProperty(default = 0)
 
     def render(self, user):
         self._render_text = self.content.replace('\n', '<br>')
@@ -142,8 +144,7 @@ class Post(db.Model):
 class Likes(db.Model):
     post_id = db.IntegerProperty(required = True)
     user_id = db.IntegerProperty(required = True)
-    like_Count = db.IntegerProperty()
-    dislike_Count = db.IntegerProperty()
+    is_like = db.IntegerProperty(required = True)
 
     @classmethod
     def like_by_post(cls, post_id):
@@ -152,7 +153,7 @@ class Likes(db.Model):
 
     @classmethod
     def already_liked(cls, post_id, user_id):
-        u = db.GqlQuery("select * from Likes where post_id = " + post_id + "and user_id = " + user_id + "order by create_on desc")
+        u = db.GqlQuery("select * from Likes where post_id = " + post_id + " and user_id = " + user_id)
         return u
 
 class Comment(db.Model):
@@ -400,17 +401,71 @@ class LikePost(BlogHandler):
             keyed = db.Key.from_path('Likes', int(post_id), parent=blog_key())
             likedd = db.get(keyed)
             user_id = str(self.user.key().id())
+            isLike = self.request.get('isLike')
+            l = Likes.already_liked(post_id, user_id).get()
+            #start real logic
+            retData = {}
 
-            if post:
-                u = db.GqlQuery(""" Select * from Likes Where post_id = 6333186975989760 """)
+            if post and (isLike == '1' or isLike == '0'):
+                # first time liking or disliking post logic
+                if not l:
+                    like = Likes(post_id=int(post_id), user_id=int(user_id), is_like=int(isLike))
+                    like.put()
+                    if isLike == '1':
+                        post.like_count = post.like_count + 1
+                        post.put()
+                    else:
+                        post.dislike_count = post.dislike_count + 1
+                        post.put()
+                elif (l and (l.is_like == 0) and (isLike == '1')):
+                    post.like_count = post.like_count + 1
+                    post.dislike_count = post.dislike_count - 1
+                    post.put()
+                    l.is_like = 1
+                    l.put()
+                elif (l and (l.is_like == 1) and (isLike == '0')):
+                    post.like_count = post.like_count - 1
+                    post.dislike_count = post.dislike_count + 1
+                    post.put()
+                    l.is_like = 0
+                    l.put()
+                else:
+                    return self.write("No Action Applied")
+                retData["likes"] = int(post.like_count)
+                retData["dislikes"] = int(post.dislike_count)
+                return self.write(retData)  
+            else:
+                return self.write("invalid arguments")
+            #return self.write(retData)
+            #return self.write("logic ended")
+
+
+            #end real logic
+
+            # if l and l.user_id: 
+            #     return self.write('likes user is :' + str(l.user_id) ) 
+            # else:
+            #     like = Likes(post_id=int(post_id), user_id=int(user_id), is_like=int(isLike))
+            #     like.put()
+            #     self.write('Does not exists added like')   
+            #if post and ((isLike == '1') or (isLike == '0')):
+            #    post.like_count = post.like_count + 1
+                # post.dislike_count = blah
+            #    post.put()
+               #return self.write('Like count is : ' + isLike + ": " + str(post.like_count))
+            #else:
+            #   return self.write('Doesnt Exists')
+            #return self.write("other stuff")
+
+            ##    u = db.GqlQuery(""" Select * from Likes Where post_id = 6333186975989760 """)
                 # if Likes.already_liked(post_id, user_id):
-                for use in u:
-                    print (use.like_Count)
-                    if use.like_Count == 0 and use.user_id == self.user.key().id():
-                        use.like_Count = 1
-                        use.dislike_Count = 0
-                        use.put()
-                        print("it was changed")
+            #    for use in u:
+            ##        print (use.like_Count)
+            ##        if use.like_Count == 0 and use.user_id == self.user.key().id():
+            ##            use.like_Count = 1
+            ##            use.dislike_Count = 0
+            ##            use.put()
+            ##            print("it was changed")
             #         if u.like_Count == 1:
             #             print("nothing will happen")
             #         else:
