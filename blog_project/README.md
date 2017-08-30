@@ -1,6 +1,6 @@
 # README
 
-##Overview
+## Overview:
 	
 Ever wanted a place where you can just write down anything that is on your mind? Ever wanted to read what is on other people's mind? Now you can. Here people are able to register or login. Don't want to register, you still will be able to read any post others have written. But only members of the blog can create, edit, delete their own posts/comments.
 
