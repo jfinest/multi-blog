@@ -7,11 +7,11 @@
       document.getElementById('hide_viewComment').style.display = 'none';
   </script>
   <br>
-  
+  <script>
+      document.getElementById('comment_title').style.display = 'inline';
+    </script>
   {% if comment %}
-	  <script>
-	  	document.getElementById('comment_title').style.display = 'inline';
-	  </script>	
+	  	
       {% for c in comment %}
         {{ c.renderd(user) | safe }}
         <br><br>
